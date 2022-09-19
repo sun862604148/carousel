@@ -83,11 +83,12 @@ export default {
           name: 'Bar Party1', // string，用于 roll 形式的指示器
           type: 'image', // string, 背景类型，image/video,
           src: imagePng, // string, 背景源
-        },{
-          name: 'Bar Party2', // string，用于 roll 形式的指示器
-          type: 'image', // string, 背景类型，image/video,
-          src: imagePng, // string, 背景源
         },
+        // {
+        //   name: 'Bar Party2', // string，用于 roll 形式的指示器
+        //   type: 'image', // string, 背景类型，image/video,
+        //   src: imagePng, // string, 背景源
+        // },
         {
           name: 'Bar Party3', // string，用于 roll 形式的指示器
           headline: '<div>Bar Party</div>', // string，用于大标题，v-html 绑定，可以自定义字号尺寸
@@ -153,14 +154,19 @@ export default {
     },
     renderRollPagination(current, total) {
       const originList = this.rollPaginationList;
-      const rollList = [originList[originList.length - 1], ...originList, originList[0]]
-      const pre = rollList[current - 1];
-      const curr = rollList[current];
-      const next = rollList[current + 1];
+      const activeIndex = total <= 2 ? current - 1 : current;
+      const rollList = total <= 2 ? originList : [originList[originList.length - 1], ...originList, originList[0]]
+      const pre = rollList[activeIndex - 1];
+      const curr = rollList[activeIndex];
+      const next = rollList[activeIndex + 1];
+      const preHtml = pre ? `<p class="swiper-pagination-roll"><span>${pre}</span></p>` : '<p class="swiper-pagination-roll"> </p>';
+      const nextHtml = next ? `<p class="swiper-pagination-roll"><span>${next}</span></p>` : '<p class="swiper-pagination-roll"> </p>'
       const paginationHtml = `
-        <span class="swiper-pagination-roll"></span>
-        <span class="swiper-pagination-roll swiper-pagination-roll-active"></span>
-        <span class="swiper-pagination-roll"></span>
+        <div class="swiper-pagination-roll-box">
+          ${preHtml}
+          <p class="swiper-pagination-roll swiper-pagination-roll-active"><span>${curr}</span></p>
+          ${nextHtml}
+        </div>
       `;
       return paginationHtml;
     },
@@ -170,15 +176,15 @@ export default {
         spaceBetween: this.spaceBetween,
         slidesPerView: 'auto',
         centeredSlides: true,
-        autoplay: {
-          delay: this.duration,
-        },
+        // autoplay: {
+        //   delay: this.duration,
+        // },
         pagination: {
           el: '.swiper-pagination',
           clickable: true,
           type: 'custom',
           renderCustom: (swiper, current, total) => {
-            return this.renderCountdownPagination(current, total);
+            return this.renderRollPagination(current, total);
           }
         },
         navigation: {
@@ -237,6 +243,35 @@ export default {
       width: 100%;
       animation: activeStyle 3000ms infinite;
       background: #FFF;
+    }
+  }
+
+  :deep(.swiper-pagination-roll) {
+    font-size: 14px;
+    line-height: 17px;
+    min-height: 17px;
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: 500;
+  }
+  :deep(.swiper-pagination-roll-active) {
+    font-size: 14px;
+    line-height: 17px;
+    color: #FFF;
+    margin: 10px 0;
+    span {
+      position: relative;
+    }
+    span::after {
+      position: absolute;
+      display: inline-block;
+      content: '';
+      width: 80%;
+      height: 3px;
+      background: #FFF;
+      border-radius: 1px;
+      left: 50%;
+      bottom: -5px;
+      transform: translateX(-50%);
     }
   }
 }
