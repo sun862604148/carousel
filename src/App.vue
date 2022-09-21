@@ -11,11 +11,11 @@ const bannerList = reactive([{
     type: 'image', // string, 背景类型，image/video,
     src: imagePng, // string, 背景源
   },
-  // {
-  //   name: 'Bar Party2', // string，用于 roll 形式的指示器
-  //   type: 'image', // string, 背景类型，image/video,
-  //   src: imagePng, // string, 背景源
-  // },
+  {
+    name: 'Bar Party2', // string，用于 roll 形式的指示器
+    type: 'image', // string, 背景类型，image/video,
+    src: imagePng, // string, 背景源
+  },
   {
     name: 'Bar Party3', // string，用于 roll 形式的指示器
     headline: '<div>Bar Party</div>', // string，用于大标题，v-html 绑定，可以自定义字号尺寸

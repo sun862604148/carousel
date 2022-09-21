@@ -53,6 +53,7 @@ Swiper.use(Autoplay)
 Swiper.use(Navigation)
 
 export default {
+  name: 'Carousel',
   props: {
     mode: {
       type: String,
@@ -78,7 +79,6 @@ export default {
   data() {
     return {
       mySwiper: null,
-      // bannerList: 
     }
   },
   computed: {
@@ -131,12 +131,16 @@ export default {
         centeredSlides: true,
         autoplay: {
           delay: this.duration,
+          disableOnInteraction: false,
         },
         pagination: {
           el: '.swiper-pagination',
           clickable: true,
           type: 'custom',
           renderCustom: (swiper, current, total) => {
+            if (this.indicator === 'countdown') {
+              return this.renderCountdownPagination(current, total);
+            }
             return this.renderRollPagination(current, total);
           }
         },
